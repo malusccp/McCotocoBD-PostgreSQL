@@ -1,7 +1,8 @@
-create table pedido
-(id_pedido serial primary key, 
-data_venda timestamp default current_timestamp, 
-status varchar(50) not null, 
-total float not null, 
-id_funcionario int references funcionario(id_funcionario), 
-id_franquia int references franquia(id_franquia) );
+CREATE TABLE pedido (
+    id_pedido serial PRIMARY KEY,
+    data_venda timestamp DEFAULT current_timestamp,
+    status varchar(50) NOT NULL,
+    total float,
+    id_funcionario int REFERENCES funcionario(id_funcionario),
+    id_franquia int REFERENCES franquia(id_franquia)
+);

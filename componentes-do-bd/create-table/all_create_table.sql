@@ -1,75 +1,83 @@
-create table categoria(
-id_categoria serial primary key, 
-nome_cat varchar(50) not null);
-
-create table ingrediente
-(id_ingrediente serial primary key, 
-nome_ingrediente varchar(50) not null);
-
-create table meta(
-id_meta serial primary key, 
-valor_meta float not null, 
-porcentagem float not null );
-
-create table franquia(
-id_franquia serial primary key, 
-nome_franquia varchar(50) not null, 
-endereco varchar(100) not null, 
-cnpj varchar(14) not null);
-
-create table produto(
-id_produto serial primary key, 
-preco_base float not null, 
-nome_prod varchar(50), 
-id_categoria int not null references categoria(id_categoria));
-
-create table funcionario1(
-id_funcionario serial primary key, 
-cpf varchar(11) not null, 
-nome_funcionario varchar(100) not null, 
-cargo varchar(50) not null, 
-salario_base float not null, 
-id_franquia int references franquia(id_franquia) );
-
-create table pedido (
-id_pedido serial primary key,
-data_venda timestamp default current_timestamp,
-status varchar(50) not null,
-total float not null,
-id_funcionario int references funcionario(id_funcionario),
-id_franquia int references franquia(id_franquia)
+CREATE TABLE categoria(
+    id_categoria serial PRIMARY KEY, 
+    nome_cat varchar(50) NOT NULL
 );
 
-create table item_pedido(
-id_pedido int references pedido(id_pedido),
-id_produto int references produto(id_produto),
-preco_unitario float not null,
-quantidade int not null,
-primary key(id_pedido, id_produto)
+CREATE TABLE ingrediente (
+    id_ingrediente serial PRIMARY KEY, 
+    nome_ingrediente varchar(50) NOT NULL
 );
 
-create table item_combo(
-id_combo int references produto(id_produto),
-id_produto int references produto(id_produto),
-qtd_prod int not null,
-primary key(id_combo, id_produto)
+CREATE TABLE meta(
+    id_meta serial PRIMARY KEY, 
+    valor_meta float NOT NULL, 
+    porcentagem float NOT NULL 
 );
 
-create table receita_produto(
-id_produto int references produto(id_produto),
-id_ingrediente int references ingrediente(id_ingrediente),
-qtd_necessaria int not null,
-primary key(id_produto, id_ingrediente) );
+CREATE TABLE franquia(
+    id_franquia serial PRIMARY KEY, 
+    nome_franquia varchar(50) NOT NULL, 
+    endereco varchar(100) NOT NULL, 
+    cnpj varchar(14) NOT NULL
+);
 
-create table estoque_unid(
-id_franquia int references franquia(id_franquia),
-id_ingrediente int references ingrediente(id_ingrediente),
-qtd_atual int not null,
-primary key(id_franquia, id_ingrediente) );
+CREATE TABLE produto(
+    id_produto serial PRIMARY KEY, 
+    preco_base float NOT NULL, 
+    nome_prod varchar(50), 
+    id_categoria int NOT NULL REFERENCES categoria(id_categoria)
+);
 
+CREATE TABLE funcionario(
+    id_funcionario serial PRIMARY KEY, 
+    cpf varchar(11) NOT NULL, 
+    nome_funcionario varchar(100) NOT NULL, 
+    cargo varchar(50) NOT NULL, 
+    salario_base float NOT NULL, 
+    id_franquia int REFERENCES franquia(id_franquia) 
+);
 
-create table meta_franquia(
-id_meta_vigente serial primary key,
-id_meta int references meta(id_meta),
-id_franquia int references franquia(id_franquia),
-eh_vigente boolean not null default true);
+CREATE TABLE pedido (
+    id_pedido serial PRIMARY KEY,
+    data_venda timestamp DEFAULT current_timestamp,
+    status varchar(50) NOT NULL,
+    total float,
+    id_funcionario int REFERENCES funcionario(id_funcionario),
+    id_franquia int REFERENCES franquia(id_franquia)
+);
+
+CREATE TABLE item_pedido(
+    id_pedido int REFERENCES pedido(id_pedido),
+    id_produto int REFERENCES produto(id_produto),
+    preco_unitario float NOT NULL,
+    quantidade int NOT NULL,
+    PRIMARY KEY(id_pedido, id_produto)
+);
+
+CREATE TABLE item_combo(
+    id_combo int REFERENCES produto(id_produto),
+    id_produto int REFERENCES produto(id_produto),
+    qtd_prod int NOT NULL,
+    PRIMARY KEY(id_combo, id_produto)
+);
+
+CREATE TABLE receita_produto(
+    id_produto int REFERENCES produto(id_produto),
+    id_ingrediente int REFERENCES ingrediente(id_ingrediente),
+    qtd_necessaria int NOT NULL,
+    PRIMARY KEY(id_produto, id_ingrediente) 
+);
+
+CREATE TABLE estoque_unid(
+    id_franquia int REFERENCES franquia(id_franquia),
+    id_ingrediente int REFERENCES ingrediente(id_ingrediente),
+    qtd_atual int NOT NULL,
+    PRIMARY KEY(id_franquia, id_ingrediente) 
+);
+
+CREATE TABLE meta_franquia(
+    id_meta_vigente serial PRIMARY KEY,
+    id_meta int REFERENCES meta(id_meta),
+    id_franquia int REFERENCES franquia(id_franquia),
+    eh_vigente boolean NOT NULL DEFAULT TRUE
+);
