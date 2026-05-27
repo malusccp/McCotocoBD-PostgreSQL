@@ -7,7 +7,7 @@ DECLARE
 
     mensagem_erro text;
 
-codigo_sqlstate text;
+	codigo_sqlstate text;
 
 BEGIN 
 
@@ -20,6 +20,7 @@ nome_tabela;
 EXCEPTION
 WHEN OTHERS THEN
         GET STACKED DIAGNOSTICS
+        
             mensagem_erro = MESSAGE_TEXT,
             codigo_sqlstate = RETURNED_SQLSTATE;
 
