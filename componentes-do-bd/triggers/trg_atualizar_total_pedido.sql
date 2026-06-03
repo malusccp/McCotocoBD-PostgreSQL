@@ -15,10 +15,13 @@ begin
     from item_pedido
     where id_pedido = v_id_pedido;
 
-    update pedido
-    set total = v_total
-    where id_pedido = v_id_pedido;
+	if exists(select 1 from pedido where v_id_pedido = id_pedido) then
+	    update pedido
+	    set total = v_total
+	    where id_pedido = v_id_pedido;
+	end if;
 
+	
     return null; 
 end;
 $$ language plpgsql;

@@ -8,7 +8,7 @@ begin
         and id_funcionario is distinct from new.id_funcionario  
     ) then
        
-        raise exception 'Erro: Já existe um funcionário cadastrado com o cpf %.', new.cpf;
+        raise exception 'Já existe um funcionário cadastrado com o cpf %.', new.cpf;
     end if;
 
     return new;
