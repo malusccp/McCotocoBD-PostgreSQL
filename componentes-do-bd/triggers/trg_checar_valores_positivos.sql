@@ -3,22 +3,22 @@ returns trigger as $$
 begin
   
     if tg_table_name = 'produto' then
-        if new.preco_base < 0 then
+        if new.preco_base <= 0 then
             raise exception 'O preço base do produto não pode ser negativo. valor fornecido: %.', new.preco_base;
         end if;
         
     elsif tg_table_name = 'item_pedido' then
-        if new.preco_unitario < 0 then
+        if new.preco_unitario <= 0 then
             raise exception 'O preço unitário do item não pode ser negativo. valor fornecido: %.', new.preco_unitario;
         end if;
 
     elsif tg_table_name = 'funcionario' then
-        if new.salario_base < 0 then
+        if new.salario_base <= 0 then
             raise exception 'O salário base do funcionário não pode ser negativo. valor fornecido: %.', new.salario_base;
         end if;
 
     elsif tg_table_name = 'pedido' then
-        if new.total < 0 then
+        if new.total <= 0 then
             raise exception 'O valor total do pedido não pode ser negativo. valor fornecido: %.', new.total;
         end if;
     end if;
