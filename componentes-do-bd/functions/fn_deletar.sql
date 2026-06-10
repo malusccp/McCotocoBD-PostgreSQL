@@ -1,38 +1,22 @@
-CREATE OR REPLACE FUNCTION deletar (nome_tabela TEXT, condicoes JSONB DEFAULT NULL)
+CREATE OR REPLACE FUNCTION deletar (nome_tabela TEXT, nome_coluna TEXT DEFAULT null, operador TEXT DEFAULT null, valor TEXT DEFAULT NULL)
 RETURNS VOID
 AS $$
 DECLARE 
+
     mensagem_erro text;
     codigo_sqlstate text;
-    where_completo text := '';
-    condicao_atual jsonb;
-    coluna text;
-    operador text;
-    valor text;
-    operador_logico text;
+
 BEGIN 
-    IF (condicoes IS NULL OR jsonb_array_length(condicoes) = 0) THEN 
+    
+    IF (nome_coluna IS NULL AND operador IS NULL AND valor IS NULL) THEN 
         EXECUTE format('DELETE FROM %I', nome_tabela);
         RAISE NOTICE 'Todos os dados da tabela "%" foram deletados!', nome_tabela;
-    ELSE
-        FOR condicao_atual IN SELECT * FROM jsonb_array_elements(condicoes)
-        LOOP
-            operador_logico := COALESCE(condicao_atual ->> 'operador_logico', ''); 
-            coluna := condicao_atual ->> 'coluna';
-            operador := condicao_atual ->> 'operador';
-            valor := condicao_atual ->> 'valor';
-
-            IF operador IS NULL OR operador NOT IN ('=', '!=', '>', '<', '>=', '<=', 'LIKE', 'ILIKE', 'IS NULL', 'IS NOT NULL') THEN
-                RAISE EXCEPTION 'Operador inválido ou não permitido de segurança: %', operador;
-            ELSIF operador IN ('IS NULL', 'IS NOT NULL') THEN
-                where_completo := where_completo || format(' %s %I %s', operador_logico, coluna, operador);
-            ELSE
-                where_completo := where_completo || format(' %s %I %s %L', operador_logico, coluna, operador, valor);
-            END IF;
-        END LOOP;
-
-        EXECUTE format('DELETE FROM %I WHERE %s', nome_tabela, where_completo);
-        RAISE NOTICE 'Os dados da tabela "%" foram deletados conforme as condições repassadas.', nome_tabela;
+	ELSIF NOT (trim(upper(operador)) IN ('=', '>', '<', '>=', '<=', '<>', '!=', 'LIKE', 'ILIKE')) THEN
+        RAISE EXCEPTION 'Operador "%" inválido ou não permitido por motivos de segurança.', operador;
+	ELSE 
+		EXECUTE format('DELETE FROM %I WHERE %I %s %L', nome_tabela, nome_coluna, operador, valor);
+		RAISE NOTICE 'Todos os dados da tabela "%" foram deletados seguindo as seguintes condições: % % %', nome_tabela, nome_coluna, operador, valor;
+        
     END IF;
 
 EXCEPTION 
