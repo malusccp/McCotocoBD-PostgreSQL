@@ -11,8 +11,11 @@ BEGIN
     IF (nome_coluna IS NULL AND operador IS NULL AND valor IS NULL) THEN 
         EXECUTE format('DELETE FROM %I', nome_tabela);
         RAISE NOTICE 'Todos os dados da tabela "%" foram deletados!', nome_tabela;
-	ELSIF NOT (trim(upper(operador)) IN ('=', '>', '<', '>=', '<=', '<>', '!=', 'LIKE', 'ILIKE')) THEN
+	ELSIF NOT (trim(upper(operador)) IN ('=', '>', '<', '>=', '<=', '<>', '!=', 'LIKE', 'ILIKE', 'IS NULL', 'IS NOT NULL')) THEN
         RAISE EXCEPTION 'Operador "%" inválido ou não permitido por motivos de segurança.', operador;
+	ELSIF (trim(upper(operador)) IN ('IS NULL', 'IS NOT NULL')) THEN
+		EXECUTE format('DELETE FROM %I WHERE %I %s', nome_tabela, nome_coluna, operador);
+        RAISE NOTICE 'Todos os dados onde "% %" foram deletados.', nome_coluna, operador;
 	ELSE 
 		EXECUTE format('DELETE FROM %I WHERE %I %s %L', nome_tabela, nome_coluna, operador, valor);
 		RAISE NOTICE 'Todos os dados da tabela "%" foram deletados seguindo as seguintes condições: % % %', nome_tabela, nome_coluna, operador, valor;
