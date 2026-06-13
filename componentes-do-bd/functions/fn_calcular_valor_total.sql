@@ -15,6 +15,10 @@ BEGIN
     
         v_valor_total := v_valor_total + v_valor_calculado;
         
+        IF v_valor_calculado IS NULL THEN
+            RAISE EXCEPTION 'Produto com ID % não foi encontrado no banco de dados.', (item->>'id_produto')::int;
+        END IF;
+        
     END LOOP; 
     
     RETURN v_valor_total;

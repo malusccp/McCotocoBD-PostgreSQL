@@ -4,7 +4,9 @@ AS $$
 BEGIN 
  
     IF (trim(upper(OLD.status)) = 'CANCELADO') THEN 
-        RAISE EXCEPTION 'O status do pedido % não pode ser mudado para "%", pois já está cancelado.', OLD.id_pedido, NEW.status;
+        RAISE EXCEPTION 'Operação negada. Não é possível alterar um pedido de CANCELADO para %.', NEW.status;
+    IF (trim(upper(OLD.status)) = 'FINALIZADO') THEN 
+    	RAISE EXCEPTION 'Operação negada. Não é possível alterar um pedido de FINALIZADO para %.', NEW.status;
     END IF;
 
     RETURN NEW;
