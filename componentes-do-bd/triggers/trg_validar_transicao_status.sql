@@ -5,6 +5,8 @@ BEGIN
  
     IF (trim(upper(OLD.status)) = 'CANCELADO') THEN 
         RAISE EXCEPTION 'Operação negada. Não é possível alterar um pedido de CANCELADO para %.', NEW.status;
+    END IF; 
+    
     IF (trim(upper(OLD.status)) = 'FINALIZADO') THEN 
     	RAISE EXCEPTION 'Operação negada. Não é possível alterar um pedido de FINALIZADO para %.', NEW.status;
     END IF;

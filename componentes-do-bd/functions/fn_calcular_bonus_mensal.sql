@@ -7,6 +7,10 @@ v_porcentagem_bonus FLOAT;
 
 begin
 
+	if p_mes < 1 or p_mes > 12 then
+		raise exception 'Mês inválido: %. Informe um valor entre 1 e 12.', p_mes;
+	end if;
+
 	v_total_vendido := fn_obter_vendas_franquia(p_id_franquia, p_mes, p_ano);
 
 	select o_valor_meta, o_porcentagem_bonus into v_valor_meta, v_porcentagem_bonus from
@@ -30,7 +34,7 @@ begin
 
 	else
         raise notice 'Aviso: A franquia % não atingiu a meta em %/%. Vendas: R$ %, Meta: R$ %', 
-            p_id_franquia, p_mes, p_ano, v_total_vendas, v_valor_meta;
+            p_id_franquia, p_mes, p_ano, v_total_vendido, v_valor_meta;
     end if;
 
 	end;

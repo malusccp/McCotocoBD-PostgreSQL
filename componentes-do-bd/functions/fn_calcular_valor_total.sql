@@ -13,11 +13,12 @@ BEGIN
         FROM produto 
         WHERE id_produto = (item ->> 'id_produto')::int;
     
-        v_valor_total := v_valor_total + v_valor_calculado;
-        
         IF v_valor_calculado IS NULL THEN
             RAISE EXCEPTION 'Produto com ID % não foi encontrado no banco de dados.', (item->>'id_produto')::int;
         END IF;
+        
+        v_valor_total := v_valor_total + v_valor_calculado;
+        
         
     END LOOP; 
     

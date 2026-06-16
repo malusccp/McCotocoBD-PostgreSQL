@@ -17,8 +17,8 @@ returns trigger as $$
 	
 $$ language plpgsql;
 
-create trigger checar_cnpj_unico_franquia
+create trigger trg_checar_cnpj_unico_franquia
 before insert or update on franquia
 for each row
-execute function checar_cnpj_unico_franquia
+execute function checar_cnpj_unico_franquia();
 

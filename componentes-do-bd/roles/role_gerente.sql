@@ -12,7 +12,7 @@ GRANT USAGE, SELECT ON SEQUENCE meta_id_meta_seq, meta_franquia_id_meta_vigente_
 
 GRANT EXECUTE ON FUNCTION inserir(TEXT, JSONB) TO gerente;
 GRANT EXECUTE ON FUNCTION atualizar(TEXT, TEXT, TEXT, TEXT, TEXT, TEXT) TO gerente;
-GRANT EXECUTE ON FUNCTION deletar(TEXT, JSONB) TO gerente;
+GRANT EXECUTE ON FUNCTION deletar(TEXT, TEXT, TEXT, TEXT) TO gerente;
 
 GRANT SELECT ON franquia TO gerente;
 
